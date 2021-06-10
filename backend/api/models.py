@@ -30,7 +30,7 @@ class Result(models.Model):
 
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='results', blank=True, null=True)
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='choice_results', blank=True, null=True)
-    ip_address = models.CharField(max_length=255, unique=True, blank=True, null=True)
+    ip_address = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
         unique_together = ['choice', 'poll', 'ip_address']
