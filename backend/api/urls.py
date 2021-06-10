@@ -21,8 +21,8 @@ schema_view = get_schema_view(
    permission_classes=(permissions.AllowAny,),
 )
 router = routers.DefaultRouter()
-router.register(r'polls', PollViewSet)
-router.register(r'choices', ChoiceViewSet)
+router.register(r'polls', PollViewSet, basename='polls')
+router.register(r'choices', ChoiceViewSet, basename='choices')
 
 urlpatterns = [
     path('', include(router.urls)),
