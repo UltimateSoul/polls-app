@@ -11,7 +11,7 @@ class ChoiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Choice
-        fields = ['id', 'message', 'votes']
+        fields = ['id', 'message', 'total_votes']
 
     def update(self, instance, validated_data):
         ip_address = get_client_ip(self.context.get('request'))
@@ -21,9 +21,25 @@ class ChoiceSerializer(serializers.ModelSerializer):
         if ip_exists:
             instance.save()
             return instance
-        Result.objects.create(choice=instance, ip_address=ip_address)  # Create new user IP
+
+        Result.objects.create(choice=instance, poll=instance.poll, ip_address=ip_address)  # Create new user IP
         instance.save()
         return instance
+
+
+class CreateResultSerializer(serializers.ModelSerializer):
+    """Votes Result Serializer"""
+
+    class Meta:
+        model = Result
+        fields = ['id', 'poll', 'choice']
+
+    def create(self, validated_data):
+        ip_address = get_client_ip(self.context.get('request'))
+        validated_data.update({'ip_address': ip_address})
+        result = Result.objects.create(**validated_data)
+        result.save()
+        return result
 
 
 class PollSerializer(serializers.ModelSerializer):

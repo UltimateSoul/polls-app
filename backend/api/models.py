@@ -21,6 +21,10 @@ class Choice(models.Model):
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='choices')
     message = models.CharField(max_length=255, null=True, blank=True)
 
+    @property
+    def total_votes(self):
+        return self.choice_results.all().count()
+
     def __str__(self):
         return self.message
 
