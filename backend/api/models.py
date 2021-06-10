@@ -11,15 +11,14 @@ class Poll(models.Model):
         return self.question
 
 
-class UserMetaData(models.Model):
-    """This represents serves as place which contains user metadata such as User Agent, IP etc"""
-
+# class UserMetaData(models.Model):
+#     """This represents serves as place which contains user metadata such as User Agent, IP etc"""
 
 
 class Choice(models.Model):
     """This model represents choice"""
 
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='choices')
     message = models.CharField(max_length=255, null=True, blank=True)
     votes = models.IntegerField(default=0)
 
