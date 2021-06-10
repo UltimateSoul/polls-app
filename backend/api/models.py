@@ -11,10 +11,6 @@ class Poll(models.Model):
         return self.question
 
 
-# class UserMetaData(models.Model):
-#     """This represents serves as place which contains user metadata such as User Agent, IP etc"""
-
-
 class Choice(models.Model):
     """This model represents choice"""
 
@@ -24,3 +20,10 @@ class Choice(models.Model):
 
     def __str__(self):
         return self.message
+
+
+class IPAddress(models.Model):
+    """This model represents Vote for Choice"""
+
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='ips')
+    ip_address = models.CharField(max_length=255, unique=True, blank=True, null=True)

@@ -13,3 +13,5 @@ class PollViewSet(viewsets.ModelViewSet):
     queryset = Poll.objects.all()
     serializer_class = PollSerializer
 
+    def get_serializer_context(self, *args, **kwargs):  # noqa
+        return {'request': self.request}
