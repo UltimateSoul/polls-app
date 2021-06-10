@@ -1,12 +1,12 @@
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 
-from core.models import Poll
-from core.serializers import PollSerializer
+from api.models import Poll
+from api.serializers import PollSerializer
 
 
 class HomeView(TemplateView):
-    template_name = 'core/home.html'
+    template_name = 'api/home.html'
 
 
 class PollViewSet(viewsets.ModelViewSet):
