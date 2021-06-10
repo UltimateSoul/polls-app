@@ -1,8 +1,8 @@
 from django.views.generic import TemplateView
 from rest_framework import viewsets
 
-from api.models import Poll, Choice
-from api.serializers import PollSerializer, ChoiceSerializer
+from api.models import Poll
+from api.serializers import PollSerializer
 
 
 class HomeView(TemplateView):
