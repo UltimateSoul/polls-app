@@ -1,5 +1,7 @@
 from django.views.generic import TemplateView
 from rest_framework import viewsets
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from api.models import Poll, Choice
 from api.serializers import PollSerializer, ChoiceSerializer
@@ -23,3 +25,16 @@ class ChoiceViewSet(viewsets.ModelViewSet):
 
     def get_serializer_context(self, *args, **kwargs):  # noqa
         return {'request': self.request}
+
+
+# class VoteUsers(APIView):
+#     """
+#     View to vote in polls
+#     """
+#
+#     def patch(self, request):
+#         """
+#         Return a list of all users.
+#         """
+#         usernames = [user.username for user in User.objects.all()]
+#         return Response(usernames)

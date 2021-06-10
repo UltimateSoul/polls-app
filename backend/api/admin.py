@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from api.models import Poll, Choice, IPAddress
+from api.models import Poll, Choice, Result
 
 
 class ChoiceInline(admin.TabularInline):
@@ -12,8 +12,8 @@ class ChoiceAdmin(admin.ModelAdmin):
     list_display = ('id', 'message')
 
 
-@admin.register(IPAddress)
-class IPAddressAdmin(admin.ModelAdmin):
+@admin.register(Result)
+class ResultAdmin(admin.ModelAdmin):
     list_display = ('id', 'ip_address')
 
 
