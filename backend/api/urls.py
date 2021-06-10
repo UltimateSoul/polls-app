@@ -6,7 +6,7 @@ from rest_framework import permissions
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
 
-from api.views import PollViewSet
+from api.views import PollViewSet, ChoiceViewSet
 
 schema_view = get_schema_view(
    openapi.Info(
@@ -22,6 +22,7 @@ schema_view = get_schema_view(
 )
 router = routers.DefaultRouter()
 router.register(r'polls', PollViewSet)
+router.register(r'choices', ChoiceViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),

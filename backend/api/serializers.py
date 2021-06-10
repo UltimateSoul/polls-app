@@ -16,12 +16,12 @@ class ChoiceSerializer(serializers.ModelSerializer):
     def update(self, instance, validated_data):
         ip_address = get_client_ip(self.context.get('request'))
         ip_exists = instance.ips.filter(ip_address=ip_address, ).exists()  # Check if that user already voted or not
-        instance.message = validated_data.message
+        instance.message = validated_data.get('message')
         if ip_exists:
             instance.save()
             return instance
         IPAddress.objects.create(choice=instance, ip_address=ip_address)  # Create new user IP
-        instance.votes = validated_data.votes
+        instance.votes = validated_data.get('votes')
         instance.save()
         return instance
 
