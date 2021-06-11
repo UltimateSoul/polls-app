@@ -37,4 +37,4 @@ class Result(models.Model):
     ip_address = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        unique_together = ['choice', 'poll', 'ip_address']
+        unique_together = ['choice', 'ip_address']

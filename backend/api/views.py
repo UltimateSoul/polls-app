@@ -1,15 +1,11 @@
-from django.views.generic import TemplateView
 from rest_framework import viewsets, status
-from rest_framework.generics import CreateAPIView
 from rest_framework.response import Response
+from rest_framework.decorators import action
+from drf_yasg.utils import swagger_auto_schema
 
-from api.models import Poll, Choice
-from api.serializers import PollSerializer, ChoiceSerializer, CreateResultSerializer
+from api.models import Poll
+from api.serializers import PollSerializer, ResultSerializer
 from api.utils import get_client_ip
-
-
-class HomeView(TemplateView):
-    template_name = 'api/home.html'
 
 
 class PollViewSet(viewsets.ModelViewSet):
@@ -19,27 +15,20 @@ class PollViewSet(viewsets.ModelViewSet):
     def get_serializer_context(self, *args, **kwargs):  # noqa
         return {'request': self.request}
 
-
-class ChoiceViewSet(viewsets.ModelViewSet):
-    queryset = Choice.objects.all()
-    serializer_class = ChoiceSerializer
-
-    def get_serializer_context(self, *args, **kwargs):  # noqa
-        return {'request': self.request}
-
-
-class VoteUsers(CreateAPIView):
-    """View to vote in polls"""
-
-    serializer_class = CreateResultSerializer
-
-    def get_serializer_context(self, *args, **kwargs):  # noqa
-        return {'request': self.request}
-
+    @swagger_auto_schema(description="Create new poll", request_body=PollSerializer,
+                         response={status.HTTP_201_CREATED: PollSerializer})
     def create(self, request, *args, **kwargs):
-        """Modified in order to handle voting options per one IP address"""
-
         serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
+
+    @swagger_auto_schema(description="Voting in polls", request_body=ResultSerializer,
+                         response={status.HTTP_201_CREATED: ResultSerializer})
+    @action(methods=['POST'], detail=False, url_name='vote', url_path='vote')
+    def vote(self, request, *args, **kwargs):  # noqa
+        serializer = ResultSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         ip_address = get_client_ip(self.request)
         ip_address_exists = serializer.validated_data.get('poll').results.filter(ip_address=ip_address)

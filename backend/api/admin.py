@@ -22,10 +22,8 @@ class TopicAdmin(admin.ModelAdmin):
     inlines = [
         ChoiceInline,
     ]
-    list_display = ('question', 'created_at')
+    list_display = ('id', 'question', 'created_at')
 
     @staticmethod
     def preview(obj):
         return obj.question[:40]
-
-

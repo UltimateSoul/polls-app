@@ -1,0 +1,9 @@
+{
+    "question": "Do you like films?",
+    "choices": [ {
+                "message": "Yep"
+            },
+            {
+                "message": "No"
+            }]
+}
