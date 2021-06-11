@@ -1,10 +1,14 @@
 # Polls project
 This project has functionality to create Polls and to share them with other people
 
-# Installation
-1) create `.env` file in the root of the project near the `dist.env` file. Fill all necessary
-variables from `dist.env` to `.env` file.
-   
-2) Execute command `docker-compose up`
-3) Go to the url `http://0.0.0.0:5000/` and feel free to do experiments with this app!
+# Installation Steps
 
+1) Create `.env` file in the root of the project, right near the `dist.env` file
+2) Populate `.env` file with all necessary environmental variables which assinged in `dist.env`, please generate 
+   Django Secret Key manually or on service like `https://djecrety.ir/`
+3) Execute command `docker-compose up`
+
+# FYI
+
+### API documentation could be found by url: `http://0.0.0.0:5000/api/swagger/`
+#### Enjoy!
