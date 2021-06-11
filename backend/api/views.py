@@ -1,3 +1,4 @@
+from drf_yasg import openapi
 from rest_framework import viewsets, status
 from rest_framework.response import Response
 from rest_framework.decorators import action
@@ -6,6 +7,9 @@ from drf_yasg.utils import swagger_auto_schema
 from api.models import Poll
 from api.serializers import PollSerializer, VoteSerializer
 from api.utils import get_client_ip
+
+
+vote_response = openapi.Response('You\'ve voted successfully!', VoteSerializer)
 
 
 class PollViewSet(viewsets.ModelViewSet):
@@ -25,7 +29,8 @@ class PollViewSet(viewsets.ModelViewSet):
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)
 
     @swagger_auto_schema(description="Voting in polls", request_body=VoteSerializer,
-                         response={status.HTTP_201_CREATED: VoteSerializer})
+                         responses={status.HTTP_201_CREATED: vote_response,
+                                    status.HTTP_400_BAD_REQUEST: "You have already voted!"})
     @action(methods=['POST'], serializer_class=VoteSerializer, detail=False, url_name='vote', url_path='vote')
     def vote(self, request, *args, **kwargs):  # noqa args and kwargs issues
         """Handles votes in polls"""
