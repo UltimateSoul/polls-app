@@ -60,3 +60,38 @@ class TestPollView(APITestCase):
         self.assertTrue(poll_response.status_code == status.HTTP_200_OK)
         response = json.loads(poll_response.content)
         self.assertTrue(response.get('question') == new_question)
+
+    def test_create_poll_with_choices_success(self):
+        data = {
+            "question": "Do you like films?",
+            "choices": [
+                {
+                    "message": "Yep"
+                },
+                {
+                    "message": "No"
+                },
+                {
+                    "message": "Don't know what to answer"
+                },
+                {
+                    "message": "See testss"
+                }
+            ]
+        }
+        poll_response = self.client.post(reverse('api:polls-list'), json.dumps(data), content_type='application/json')
+        self.assertEqual(poll_response.status_code, status.HTTP_201_CREATED)
+        response = json.loads(poll_response.content)
+        poll_id = response.get('id')
+        self.assertTrue(Poll.objects.filter(id=poll_id).exists())
+        for choice in response.get('choices'):
+            self.assertTrue(Choice.objects.filter(id=choice.get('id')).exists())
+
+    def test_vote_poll_on_choices_success(self):
+        data = {
+            "choice": self.choice.id
+        }
+        params = {'pk': self.poll.id}
+        vote_response = self.client.post(reverse('api:polls-vote', kwargs=params), data)
+        self.assertEqual(vote_response.status_code, status.HTTP_201_CREATED)
+

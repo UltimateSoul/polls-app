@@ -34,7 +34,7 @@ class PollSerializer(serializers.ModelSerializer):
     """Listing Poll's objects serializer"""
 
     total_votes = serializers.ReadOnlyField()
-    choices = ChoiceSerializer(many=True, required=False)
+    choices = ChoiceSerializer(many=True, required=True)
     votes = VoteSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
