@@ -1,9 +1,17 @@
 {
-    "question": "Do you like films?",
-    "choices": [ {
-                "message": "Yep"
-            },
-            {
-                "message": "No"
-            }]
+  "question": "Do you like films?",
+  "choices": [
+    {
+      "message": "Yep"
+    },
+    {
+      "message": "No"
+    },
+    {
+      "message": "Don't know what to answer"
+    },
+    {
+      "message": "See results"
+    }
+  ]
 }

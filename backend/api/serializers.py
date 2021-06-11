@@ -25,7 +25,7 @@ class PollSerializer(serializers.ModelSerializer):
     """Listing Poll's objects serializer"""
 
     choices = ChoiceSerializer(many=True, required=False)
-    results = VoteSerializer(many=True, read_only=True)
+    votes = VoteSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         choices = validated_data.pop('choices')
@@ -37,4 +37,4 @@ class PollSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poll
-        fields = ['id', 'question', 'choices', 'results']
+        fields = ['id', 'question', 'choices', 'votes']

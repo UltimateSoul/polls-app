@@ -6,6 +6,12 @@ from rest_framework.test import APITestCase
 from api.models import Poll, Choice
 from api.tests.factories import PollFactory, ChoiceFactory
 
+IP_ADDRESSES = ['25.112.160.25',
+                '89.131.217.251',
+                '69.132.146.10',
+                '190.115.63.68',
+                '156.140.160.206']
+
 
 class TestPollView(APITestCase):
 
@@ -56,7 +62,6 @@ class TestPollView(APITestCase):
 
     # def test_create_poll_with_choices
 
-
     # def test_poll_view_list_success(self):
     #     """Checks flow when user goes to his profile"""
     #
@@ -65,4 +70,3 @@ class TestPollView(APITestCase):
     #     response = json.loads(poll_response.content)[0]
     #     self.assertTrue(response.get('question') == self.poll.question)
     #     self.assertTrue(response.get('choices')[0].get('message') == self.choice.message)
-

@@ -1,11 +1,12 @@
 from django.db import models
 
+from api.mixins import CreatedUpdatedAtMixin
 
-class Poll(models.Model):
+
+class Poll(CreatedUpdatedAtMixin):
     """This model represents Poll itself"""
 
     question = models.TextField()
-    created_at = models.DateTimeField(auto_now_add=True)
 
     @property
     def total_votes(self):
@@ -15,7 +16,7 @@ class Poll(models.Model):
         return self.question
 
 
-class Choice(models.Model):
+class Choice(CreatedUpdatedAtMixin):
     """This model represents choice"""
 
     poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='choices')
@@ -29,7 +30,7 @@ class Choice(models.Model):
         return self.message
 
 
-class Vote(models.Model):
+class Vote(CreatedUpdatedAtMixin):
     """This model represents Vote for Choice
 
         This model contain poll foreign key in order to make available functionality of voting in multiple answers

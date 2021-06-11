@@ -40,7 +40,7 @@ class PollViewSet(viewsets.ModelViewSet):
         ip_address = get_client_ip(self.request)
         poll = serializer.validated_data.get('poll')
         choice = serializer.validated_data.get('choice')
-        ip_address_exists = poll.results.filter(ip_address=ip_address)
+        ip_address_exists = poll.votes.filter(ip_address=ip_address).exists()
 
         if ip_address_exists:  # This functionality could be switched in order to make flexibility in multiple choices
             data = {"detail": "You have already voted!"}
@@ -51,5 +51,6 @@ class PollViewSet(viewsets.ModelViewSet):
             self.perform_create(serializer)
             headers = self.get_success_headers(serializer.data)
             return Response({'Message': 'You\'ve voted successfully!'}, status=status.HTTP_201_CREATED, headers=headers)
+
         data = {"detail": 'The poll doesn\'t have this choice'}
         return Response(data=data, status=status.HTTP_400_BAD_REQUEST)
