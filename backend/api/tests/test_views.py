@@ -1,6 +1,7 @@
 import json
 
 from django.urls import reverse
+from rest_framework import status
 from rest_framework.test import APITestCase
 
 from api.models import Poll, Choice
@@ -25,7 +26,7 @@ class TestPollView(APITestCase):
         """Checks that polls can be listed successfully"""
 
         poll_response = self.client.get(reverse('api:polls-list'))
-        self.assertTrue(poll_response.status_code == 200)
+        self.assertTrue(poll_response.status_code == status.HTTP_200_OK)
         response = json.loads(poll_response.content)[0]
         self.assertTrue(response.get('question') == self.poll.question)
         self.assertTrue(response.get('choices')[0].get('message') == self.choice.message)
@@ -35,7 +36,7 @@ class TestPollView(APITestCase):
 
         params = {'pk': self.poll.id}
         poll_response = self.client.get(reverse('api:polls-detail', kwargs=params))
-        self.assertTrue(poll_response.status_code == 200)
+        self.assertTrue(poll_response.status_code == status.HTTP_200_OK)
         response = json.loads(poll_response.content)
         self.assertTrue(response.get('question') == self.poll.question)
         self.assertTrue(response.get('choices')[0].get('message') == self.choice.message)
@@ -45,7 +46,7 @@ class TestPollView(APITestCase):
 
         params = {'pk': self.poll.id}
         poll_response = self.client.delete(reverse('api:polls-detail', kwargs=params))
-        self.assertTrue(poll_response.status_code == 204)
+        self.assertTrue(poll_response.status_code == status.HTTP_204_NO_CONTENT)
         self.assertFalse(Poll.objects.all().exists())
         self.assertFalse(Choice.objects.all().exists())
 
@@ -56,17 +57,31 @@ class TestPollView(APITestCase):
         new_question = f"Updated old message: {self.poll.question}"
         data = {'question': new_question}
         poll_response = self.client.patch(reverse('api:polls-detail', kwargs=params), data)
-        self.assertTrue(poll_response.status_code == 200)
+        self.assertTrue(poll_response.status_code == status.HTTP_200_OK)
         response = json.loads(poll_response.content)
         self.assertTrue(response.get('question') == new_question)
 
-    # def test_create_poll_with_choices
-
-    # def test_poll_view_list_success(self):
-    #     """Checks flow when user goes to his profile"""
-    #
-    #     poll_response = self.client.get(reverse('api:polls-list'))
-    #     self.assertTrue(poll_response.status_code == 200)
-    #     response = json.loads(poll_response.content)[0]
-    #     self.assertTrue(response.get('question') == self.poll.question)
-    #     self.assertTrue(response.get('choices')[0].get('message') == self.choice.message)
+    def test_create_poll_with_choices_success(self):
+        data = {
+            "question": "Do you like films?",
+            "choices": [
+                {
+                    "message": "Yep"
+                },
+                {
+                    "message": "No"
+                },
+                {
+                    "message": "Don't know what to answer"
+                },
+                {
+                    "message": "See results"
+                }
+            ]
+        }
+        poll_response = self.client.post(reverse('api:polls-list'), data)
+        self.assertEqual(poll_response, status.HTTP_201_CREATED)
+        response = json.loads(poll_response.content)
+        from pprint import pprint
+        pprint(response)
+        # self.assertTrue(Poll.objects.get)

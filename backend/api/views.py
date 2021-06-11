@@ -31,16 +31,16 @@ class PollViewSet(viewsets.ModelViewSet):
     @swagger_auto_schema(description="Voting in polls", request_body=VoteSerializer,
                          responses={status.HTTP_201_CREATED: vote_response,
                                     status.HTTP_400_BAD_REQUEST: "You have already voted!"})
-    @action(methods=['POST'], serializer_class=VoteSerializer, detail=False, url_name='vote', url_path='vote')
+    @action(methods=['POST'], serializer_class=VoteSerializer, detail=True, url_name='vote', url_path='vote')
     def vote(self, request, *args, **kwargs):  # noqa args and kwargs issues
         """Handles votes in polls"""
 
-        serializer = VoteSerializer(data=request.data)
+        serializer = VoteSerializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         ip_address = get_client_ip(self.request)
-        poll = serializer.validated_data.get('poll')
+        poll = Poll.objects.get(pk=kwargs.get('pk'))
         choice = serializer.validated_data.get('choice')
-        ip_address_exists = poll.votes.filter(ip_address=ip_address).exists()
+        ip_address_exists = poll.choices.filter(choice_votes__ip_address=ip_address).exists()
 
         if ip_address_exists:  # This functionality could be switched in order to make flexibility in multiple choices
             data = {"detail": "You have already voted!"}

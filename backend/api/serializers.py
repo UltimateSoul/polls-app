@@ -3,6 +3,7 @@
 from rest_framework import serializers
 
 from api.models import Poll, Choice, Vote
+from api.utils import get_client_ip
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -18,7 +19,15 @@ class VoteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Vote
-        fields = ['id', 'poll', 'choice']
+        fields = ['id', 'choice']
+
+    def create(self, validated_data):
+        self.context.get(f'REQUEST:   ', 'request')
+        ip_address = get_client_ip(self.context.get('request'))
+        validated_data.update({'ip_address': ip_address})
+        vote = Vote.objects.create(**validated_data)
+        vote.save()
+        return vote
 
 
 class PollSerializer(serializers.ModelSerializer):
@@ -28,6 +37,7 @@ class PollSerializer(serializers.ModelSerializer):
     votes = VoteSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
+
         choices = validated_data.pop('choices')
         instance = Poll.objects.create(**validated_data)
         for choice_data in choices:

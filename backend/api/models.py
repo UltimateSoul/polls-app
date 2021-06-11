@@ -10,7 +10,10 @@ class Poll(CreatedUpdatedAtMixin):
 
     @property
     def total_votes(self):
-        return self.votes.all().count()  # noqa related connection
+        total = 0
+        for choice in self.choices:  # noqa related connection
+            total += choice.choice_votes.count()
+        return total
 
     def __str__(self):
         return self.question
@@ -38,7 +41,6 @@ class Vote(CreatedUpdatedAtMixin):
         This model contain choice foreign key in order to determine which particular choice user did
     """
 
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')
     choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='choice_votes')
     ip_address = models.GenericIPAddressField()
 
