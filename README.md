@@ -4,7 +4,8 @@ This project has functionality to create Polls and to share them with other peop
 # Installation Steps
 
 1) Create `.env` file in the root of the project, right near the `dist.env` file
-2) Populate `.env` file with all necessary environmental variables which assinged in `dist.env`
+2) Populate `.env` file with all necessary environmental variables which assinged in `dist.env`, please generate 
+   Django Secret Key manually or on service like `https://djecrety.ir/`
 3) Execute command `docker-compose up`
 
 # FYI
