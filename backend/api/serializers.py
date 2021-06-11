@@ -2,8 +2,7 @@
 
 from rest_framework import serializers
 
-from api.models import Poll, Choice, Result
-from api.utils import get_client_ip
+from api.models import Poll, Choice, Vote
 
 
 class ChoiceSerializer(serializers.ModelSerializer):
@@ -14,19 +13,19 @@ class ChoiceSerializer(serializers.ModelSerializer):
         fields = ['id', 'message', 'total_votes']
 
 
-class ResultSerializer(serializers.ModelSerializer):
+class VoteSerializer(serializers.ModelSerializer):
     """Create Votes Result Serializer"""
 
     class Meta:
-        model = Result
+        model = Vote
         fields = ['id', 'poll', 'choice']
 
 
 class PollSerializer(serializers.ModelSerializer):
     """Listing Poll's objects serializer"""
 
-    choices = ChoiceSerializer(many=True, required=True)
-    results = ResultSerializer(many=True, read_only=True)
+    choices = ChoiceSerializer(many=True, required=False)
+    results = VoteSerializer(many=True, read_only=True)
 
     def create(self, validated_data):
         choices = validated_data.pop('choices')
