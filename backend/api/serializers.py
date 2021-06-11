@@ -33,6 +33,7 @@ class VoteSerializer(serializers.ModelSerializer):
 class PollSerializer(serializers.ModelSerializer):
     """Listing Poll's objects serializer"""
 
+    total_votes = serializers.ReadOnlyField()
     choices = ChoiceSerializer(many=True, required=False)
     votes = VoteSerializer(many=True, read_only=True)
 
@@ -47,4 +48,4 @@ class PollSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Poll
-        fields = ['id', 'question', 'choices', 'votes']
+        fields = ['id', 'question', 'choices', 'votes', 'total_votes']

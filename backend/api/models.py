@@ -11,7 +11,7 @@ class Poll(CreatedUpdatedAtMixin):
     @property
     def total_votes(self):
         total = 0
-        for choice in self.choices:  # noqa related connection
+        for choice in self.choices.all():  # noqa related connection
             total += choice.choice_votes.count()
         return total
 
