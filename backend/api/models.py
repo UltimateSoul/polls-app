@@ -37,8 +37,8 @@ class Vote(models.Model):
         This model contain choice foreign key in order to determine which particular choice user did
     """
 
-    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes', blank=True, null=True)
-    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='choice_votes', blank=True, null=True)
+    poll = models.ForeignKey(Poll, on_delete=models.CASCADE, related_name='votes')
+    choice = models.ForeignKey(Choice, on_delete=models.CASCADE, related_name='choice_votes')
     ip_address = models.GenericIPAddressField()
 
     class Meta:
